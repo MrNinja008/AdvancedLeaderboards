@@ -1,0 +1,9 @@
+name: AdvancedLeaderboards
+main: Rushil13579\AdvancedLeaderboards\Main
+api: 3.0.0
+version: 1.0.0
+mcpe-protocol: [428]
+
+permissions:
+  al.command.leaderboard:
+    description: Allows a player to access all leaderboard commands!
