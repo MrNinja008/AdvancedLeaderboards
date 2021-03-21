@@ -76,6 +76,7 @@ class Main extends PluginBase {
 
         $this->saveDefaultConfig();
         $this->cfg = $this->getConfig();
+        $this->cfg;
 
         $this->versionCheck();
 
