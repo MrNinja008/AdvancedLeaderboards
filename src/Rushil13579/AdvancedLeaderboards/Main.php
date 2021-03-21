@@ -76,7 +76,6 @@ class Main extends PluginBase {
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
         $this->saveDefaultConfig();
-        $this->getResource('config.yml');
         $this->cfg = $this->getConfig();
 
         $this->versionCheck();

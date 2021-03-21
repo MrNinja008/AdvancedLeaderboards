@@ -4,24 +4,19 @@ namespace Rushil13579\AdvancedLeaderboards;
 
 use pocketmine\{
     Server,
-    Player
-};
+    Player,
 
-use pocketmine\entity\{
-    ALEntity
 };
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\{
     PlayerJoinEvent,
     PlayerDeathEvent,
-    PlayerMoveEvent,
     PlayerChatEvent
 };
 use pocketmine\event\entity\{
     EntityDamageEvent,
-    EntityDamageByEntityEvent,
-    EntityMotionEvent
+    EntityDamageByEntityEvent
 };
 use pocketmine\event\block\{
     BlockBreakEvent,
@@ -116,10 +111,6 @@ class EventListener implements Listener {
         }
         
         $ev->setCancelled();
-    }
-
-    public function onMotion(EntityMotionEvent $ev) : void {
-        $this->main->getServer()->broadcastMessage('a');
     }
 
 
