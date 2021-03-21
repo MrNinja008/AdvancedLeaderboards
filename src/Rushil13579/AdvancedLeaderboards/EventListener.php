@@ -28,7 +28,7 @@ use pocketmine\event\block\{
     BlockPlaceEvent
 };
 
-use Rushil13579\AdvancedLeaderboards\Main;
+//use Rushil13579\AdvancedLeaderboards\Main;
 
 class EventListener implements Listener {
 
