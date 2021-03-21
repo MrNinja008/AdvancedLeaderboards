@@ -31,8 +31,6 @@ use Rushil13579\AdvancedLeaderboards\Tasks\{
     MoneyUpdateTask
 };
 
-use Rushil13579\AdvancedLeaderboards\EventListener;
-
 use onebone\economyapi\EconomyAPI;
 use jojoe77777\FormAPI\SimpleForm;
 

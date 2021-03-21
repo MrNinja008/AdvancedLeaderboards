@@ -61,8 +61,10 @@ class EventListener implements Listener {
             if($this->main->lbmove[$player->getName()] !== 'pending'){
                 $entity = $this->main->lbmove[$player->getName()];
                 $entity->teleport($player);
-                $msg = $this->main->formatMessage($this->main->cfg->get('leaderboard-moved-msg'));
-                $player->sendMessage($this->main->generateLeaderboardMsg($entity, $msg));
+                $msg = $this->main->getConfig()->get('leaderboard-moved-msg');
+                $msg = $this->main->formatMessage($msg);
+                $msg = $this->main->generateLeaderboardMsg($entity, $msg);
+                $player->sendMessage($msg);
                 unset($this->main->lbmove[$player->getName()]);
                 $ev->setCancelled();
             }
