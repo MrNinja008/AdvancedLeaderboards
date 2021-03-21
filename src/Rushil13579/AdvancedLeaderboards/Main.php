@@ -42,6 +42,9 @@ class Main extends PluginBase {
     public $kdr;
     public $ks;
     public $hks;
+    public $bp;
+    public $bb;
+    public $ot;
     public $money;
 
     public $lbremove = [];
