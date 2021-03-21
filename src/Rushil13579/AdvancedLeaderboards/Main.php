@@ -413,41 +413,39 @@ class Main extends PluginBase {
             if($type == 'Top Money'){
                 if(isset($money)){
                     $data = $money;
-                } else {
-                    $data = '';
                 }
-            } else {
-                $data = '';
             }
         }
 
         $counter = 1;
         $text = $this->formatMessage(str_replace('{leaderboard_name}', $type, $this->cfg->get('leaderboard-title'))) . "\n";
-        foreach($data as $name => $value){
+        if(isset($data)){
+            foreach($data as $name => $value){
 
-            if($data === $ot){
-                if(isset($this->otsession[$name])){
-                    $value += $this->otsession[$name];
+                if($data === $ot){
+                    if(isset($this->otsession[$name])){
+                        $value += $this->otsession[$name];
+                    }
+                    $hours = floor($value / 3600);
+                    $minutes = floor(($value / 60) % 60);
+                    $seconds = $value % 60;
+                    $value = $hours . 'H ' . $minutes . 'M ' . $seconds . 'S';
                 }
-                $hours = floor($value / 3600);
-                $minutes = floor(($value / 60) % 60);
-                $seconds = $value % 60;
-                $value = $hours . 'H ' . $minutes . 'M ' . $seconds . 'S';
-            }
 
-            if($counter == 1){
-                $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[0]));
+                if($counter == 1){
+                    $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[0]));
+                }
+                if($counter == 2){
+                    $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[1]));
+                }
+                if($counter == 3){
+                    $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[2]));
+                }
+                if($counter > 3){
+                    $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[3]));
+                }
+                $counter++;
             }
-            if($counter == 2){
-                $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[1]));
-            }
-            if($counter == 3){
-                $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[2]));
-            }
-            if($counter > 3){
-                $text .= "\n" . $this->formatMessage(str_replace(['{rank}', '{player_name}', '{value}'], [$counter, $name, $value], $this->cfg->get('leaderboard-lines')[3]));
-            }
-            $counter++;
         }
         $entity->setNameTag($text);
     }
