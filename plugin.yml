@@ -3,6 +3,7 @@ main: Rushil13579\AdvancedLeaderboards\Main
 api: 3.0.0
 version: 1.0.0
 mcpe-protocol: [428]
+softdepend: [EconomyAPI]
 
 permissions:
   al.command.leaderboard:

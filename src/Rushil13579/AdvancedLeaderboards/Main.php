@@ -31,12 +31,15 @@ use Rushil13579\AdvancedLeaderboards\Tasks\{
     MoneyUpdateTask
 };
 
+use Rushil13579\AdvancedLeaderboards\EventListener;
+
 use onebone\economyapi\EconomyAPI;
 use jojoe77777\FormAPI\SimpleForm;
 
 class Main extends PluginBase {
 
     public $cfg;
+    public $joins;
     public $kills;
     public $deaths;
     public $kdr;
@@ -89,7 +92,7 @@ class Main extends PluginBase {
         $this->startTasks();
     }
 
-    public function onDisable(){ 
+    public function onDisable(){
         foreach($this->otsession as $player => $time){
             $this->ot->set($player, $this->ot->get($player) + $time);
             $this->ot->save();
