@@ -275,12 +275,12 @@ class Main extends PluginBase {
     // MESSAGE MANAGER
 
 
-    public function formatMessage($msg){
+    public function formatMessage(string $msg){
         $msg = str_replace(['&', '{line}', '{prefix}'], ['§', "\n", self::PREFIX], $msg);
         return (string) $msg;
     }
 
-    public function generateStatsMsg($player, $msg){
+    public function generateStatsMsg($player, string $msg){
         $joins = $this->joins->get($player->getName());
         $kills = $this->kills->get($player->getName());
         $deaths = $this->deaths->get($player->getName());
@@ -305,7 +305,7 @@ class Main extends PluginBase {
         return (string) $fm;
     }
 
-    public function generateLeaderboardMsg($entity, $msg){
+    public function generateLeaderboardMsg($entity, string $msg){
         $type = $this->typeOfALEntity($entity);
         $msg = str_replace('{leaderboard_type}', $type, $msg);
         return (string) $msg;
