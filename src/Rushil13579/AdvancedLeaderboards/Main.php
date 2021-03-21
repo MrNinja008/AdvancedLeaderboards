@@ -413,7 +413,13 @@ class Main extends PluginBase {
             $data = $converter[$type];
         } else {
             if($type == 'Top Money'){
-                $data = $money;
+                if($this->cfg->get('topmoney-leaderboard-support') == 'true'){
+                    $data = $money;
+                } else {
+                    $data = '';
+                }
+            } else {
+                $data = '';
             }
         }
 
