@@ -32,6 +32,8 @@ use Rushil13579\AdvancedLeaderboards\Main;
 
 class EventListener implements Listener {
 
+    use Main;
+
     private $main;
 
     public function __construct(Main $main){
