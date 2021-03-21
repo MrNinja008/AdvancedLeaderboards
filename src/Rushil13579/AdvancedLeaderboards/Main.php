@@ -37,6 +37,7 @@ use jojoe77777\FormAPI\SimpleForm;
 class Main extends PluginBase {
 
     public $cfg;
+
     public $joins;
     public $kills;
     public $deaths;
@@ -75,6 +76,7 @@ class Main extends PluginBase {
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
         $this->saveDefaultConfig();
+        $this->getResource('config.yml');
         $this->cfg = $this->getConfig();
 
         $this->versionCheck();
