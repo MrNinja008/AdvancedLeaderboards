@@ -25,6 +25,8 @@ use Rushil13579\AdvancedLeaderboards\Commands\{
     StatsCommand
 };
 
+use Rushil13579\AdvancedLeaderboards\Events\EventListener;
+
 use Rushil13579\AdvancedLeaderboards\Tasks\{
     LeaderboardUpdateTask,
     OnlineTimeUpdateTask,
