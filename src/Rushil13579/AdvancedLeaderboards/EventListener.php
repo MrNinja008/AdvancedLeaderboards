@@ -28,12 +28,11 @@ use pocketmine\event\block\{
     BlockPlaceEvent
 };
 
-//use Rushil13579\AdvancedLeaderboards\Main;
+use Rushil13579\AdvancedLeaderboards\Main;
 
 class EventListener implements Listener {
 
-    use Main;
-
+    /**@var Main */
     private $main;
 
     public function __construct(Main $main){
