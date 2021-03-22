@@ -12,7 +12,9 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\{
     PlayerJoinEvent,
     PlayerDeathEvent,
-    PlayerChatEvent
+    PlayerChatEvent,
+    PlayerJumpEvent,
+    PlayerItemConsumeEvent
 };
 use pocketmine\event\entity\{
     EntityDamageEvent,
@@ -22,6 +24,7 @@ use pocketmine\event\block\{
     BlockBreakEvent,
     BlockPlaceEvent
 };
+use pocketmine\event\inventory\CraftItemEvent;
 
 use Rushil13579\AdvancedLeaderboards\Main;
 
@@ -48,21 +51,52 @@ class EventListener implements Listener {
         $player = $ev->getPlayer();
         $msg = $ev->getMessage();
 
-        if($msg !== 'confirm'){
+        if(!$ev->isCancelled()){
+            $this->main->addMessage($player);
+        }
+
+        if($msg !== 'confirm' and $msg !== 'cancel'){
             return null;
         }
 
-        if(isset($this->main->lbmove[$player->getName()])){
-            if($this->main->lbmove[$player->getName()] !== 'pending'){
-                $entity = $this->main->lbmove[$player->getName()];
-                $entity->teleport($player);
-                $msg = $this->main->cfg->get('leaderboard-moved-msg');
-                $msg = $this->main->formatMessage($msg);
-                $msg = $this->main->generateLeaderboardMsg($entity, $msg);
-                $player->sendMessage($msg);
+        if($msg === 'confirm'){
+            if(isset($this->main->lbmove[$player->getName()])){
+                if($this->main->lbmove[$player->getName()] !== 'pending'){
+                    $entity = $this->main->lbmove[$player->getName()];
+                    $entity->teleport($player);
+                    $msg = $this->main->formatMessage($this->main->cfg->get('leaderboard-moved-msg'));
+                    $player->sendMessage($this->main->generateLeaderboardMsg($entity, $msg));
+                    unset($this->main->lbmove[$player->getName()]);
+                    $ev->setCancelled();
+                }
+            }
+        }
+
+        if($msg === 'cancel'){
+            if(isset($this->main->lbmove[$player->getName()])){
                 unset($this->main->lbmove[$player->getName()]);
+                $player->sendMessage($this->main->formatMessage($this->main->cfg->get('leaderboard-move-cancelled-msg')));
                 $ev->setCancelled();
             }
+            if(isset($this->main->lbremove[$player->getName()])){
+                unset($this->main->lbremove[$player->getName()]);
+                $player->sendMessage($this->main->formatMessage($this->main->cfg->get('leaderboard-remove-cancelled-msg')));
+                $ev->setCancelled();
+            }
+        }
+    }
+
+    public function onJump(PlayerJumpEvent $ev){
+        $player = $ev->getPlayer();
+
+        $this->main->addJump($player);
+    }
+
+    public function onConsume(PlayerItemConsumeEvent $ev){
+        $player = $ev->getPlayer();
+
+        if(!$ev->isCancelled()){
+            $this->main->addConsume($player);
         }
     }
 
@@ -134,5 +168,15 @@ class EventListener implements Listener {
         }
 
         $this->main->addBlockBreak($ev->getPlayer());
+    }
+
+
+    // INVENTORY EVENTS
+
+
+    public function onCraft(CraftItemEvent $ev){
+        $player = $ev->getPlayer();
+
+        $this->main->addCraft($player);
     }
 }

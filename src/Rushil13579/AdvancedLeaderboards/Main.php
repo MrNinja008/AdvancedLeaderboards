@@ -28,11 +28,12 @@ use Rushil13579\AdvancedLeaderboards\Commands\{
 use Rushil13579\AdvancedLeaderboards\Tasks\{
     LeaderboardUpdateTask,
     OnlineTimeUpdateTask,
+    XpUpdateTask,
     MoneyUpdateTask
 };
 
-use onebone\economyapi\EconomyAPI;
 use jojoe77777\FormAPI\SimpleForm;
+use onebone\economyapi\EconomyAPI;
 
 class Main extends PluginBase {
 
@@ -46,7 +47,13 @@ class Main extends PluginBase {
     public $hks;
     public $bp;
     public $bb;
+    public $jumps;
+    public $messengers;
+    public $crafts;
+    public $ic;
+    public $xp;
     public $ot;
+
     public $money;
 
     public $lbremove = [];
@@ -65,6 +72,11 @@ class Main extends PluginBase {
         'Top Highest Killstreak',
         'Top Blocks Placed',
         'Top Blocks Broken',
+        'Top Jumps',
+        'Top Messengers',
+        'Top Crafter',
+        'Top Item Consumer',
+        'Top Xp',
         'Top Online Time'
     ];
 
@@ -130,6 +142,11 @@ class Main extends PluginBase {
         $this->hks = new Config($this->getDataFolder() . 'playerdata/' . 'highestkillstreak.yml', Config::YAML);
         $this->bp = new Config($this->getDataFolder() . 'playerdata/' . 'blocksplaced.yml', Config::YAML);
         $this->bb = new Config($this->getDataFolder() . 'playerdata/' . 'blocksbroken.yml', Config::YAML);
+        $this->jumps = new Config($this->getDataFolder() . 'playerdata/' . 'jumps.yml', Config::YAML);
+        $this->messengers = new Config($this->getDataFolder() . 'playerdata/' . 'messengers.yml', Config::YAML);
+        $this->crafts = new Config($this->getDataFolder() . 'playerdata/' . 'crafts.yml', Config::YAML);
+        $this->ic = new Config($this->getDataFolder() . 'playerdata/' . 'itemsconsumed.yml', Config::YAML);
+        $this->xp = new Config($this->getDataFolder() . 'playerdata/' . 'xp.yml', Config::YAML);
         $this->ot = new Config($this->getDataFolder() . 'playerdata/' . 'onlinetime.yml', Config::YAML);
 
         if($this->cfg->get('topmoney-leaderboard-support') == 'true'){
@@ -139,6 +156,7 @@ class Main extends PluginBase {
 
     public function startTasks(){
         $this->getScheduler()->scheduleRepeatingTask(new LeaderboardUpdateTask($this), 20 * $this->cfg->get('leaderboard-update-time'));
+        $this->getScheduler()->scheduleRepeatingTask(new XpUpdateTask($this), 20 * $this->cfg->get('topxp-update-time'));
         $this->getScheduler()->scheduleRepeatingTask(new OnlineTimeUpdateTask($this), 20);
 
         if($this->cfg->get('topmoney-leaderboard-support') == 'true'){
@@ -189,6 +207,31 @@ class Main extends PluginBase {
         if(!$this->bb->exists($player->getName())){
             $this->bb->set($player->getName(), 0);
             $this->bb->save();
+        }
+
+        if(!$this->jumps->exists($player->getName())){
+            $this->jumps->set($player->getName(), 0);
+            $this->jumps->save();
+        }
+
+        if(!$this->messengers->exists($player->getName())){
+            $this->messengers->set($player->getName(), 0);
+            $this->messengers->save();
+        }
+
+        if(!$this->crafts->exists($player->getName())){
+            $this->crafts->set($player->getName(), 0);
+            $this->crafts->save();
+        }
+
+        if(!$this->ic->exists($player->getName())){
+            $this->ic->set($player->getName(), 0);
+            $this->ic->save();
+        }
+
+        if(!$this->xp->exists($player->getName())){
+            $this->xp->set($player->getName(), 0);
+            $this->xp->save();
         }
 
         if(!$this->ot->exists($player->getName())){
@@ -258,6 +301,31 @@ class Main extends PluginBase {
         $this->bb->save();
     }
 
+    public function addJump($player){
+        $this->jumps->set($player->getName(), $this->jumps->get($player->getName()) + 1);
+        $this->jumps->save();
+    }
+
+    public function addMessage($player){
+        $this->messengers->set($player->getName(), $this->messengers->get($player->getName()) + 1);
+        $this->messengers->save();
+    }
+
+    public function addCraft($player){
+        $this->crafts->set($player->getName(), $this->crafts->get($player->getName()) + 1);
+        $this->crafts->save();
+    }
+
+    public function addConsume($player){
+        $this->ic->set($player->getName(), $this->ic->get($player->getName()) + 1);
+        $this->ic->save();
+    }
+
+    public function updateXp($player){
+        $this->xp->set($player->getName(), $player->getXpLevel());
+        $this->xp->save();
+    }
+
     public function updateOnlineTime($player){
         if(!isset($this->otsession[$player->getName()])){
             $this->otsession[$player->getName()] = 0;
@@ -290,13 +358,18 @@ class Main extends PluginBase {
         $hks = $this->hks->get($player->getName());
         $bp = $this->bp->get($player->getName());
         $bb = $this->bb->get($player->getName());
+        $jumps = $this->jumps->get($player->getName());
+        $msgs = $this->messengers->get($player->getName());
+        $crafts = $this->crafts->get($player->getName());
+        $ic = $this->ic->get($player->getName());
+        $xp = $this->xp->get($player->getName());
 
         $ot = $this->ot->get($player->getName()) + $this->otsession[$player->getName()];
         $hours = floor($ot / 3600);
         $minutes = floor(($ot / 60) % 60);
         $seconds = $ot % 60;
 
-        $fm = str_replace(['{joins}', '{name}', '{kills}', '{deaths}', '{kdr}', '{killstreak}', '{highestkillstreak}', '{blocksbroken}', '{blocksplaced}', '{hours}', '{minutes}', '{seconds}'], [$joins, $player->getName(), $kills, $deaths, $kdr, $ks, $hks, $bp, $bb, $hours, $minutes, $seconds], $msg);
+        $fm = str_replace(['{joins}', '{name}', '{kills}', '{deaths}', '{kdr}', '{killstreak}', '{highestkillstreak}', '{blocksbroken}', '{blocksplaced}', '{jumps}', '{msgs}', '{crafts}', '{itemsconsumed}', '{xp}', '{hours}', '{minutes}', '{seconds}'], [$joins, $player->getName(), $kills, $deaths, $kdr, $ks, $hks, $bp, $bb, $jumps, $msgs, $crafts, $ic, $xp, $hours, $minutes, $seconds], $msg);
         
         if($this->cfg->get('topmoney-leaderboard-support') == 'true'){
             $money = $this->money->get($player->getName());
@@ -335,6 +408,28 @@ class Main extends PluginBase {
             ]
         ));
         return $nbt;
+    }
+
+    public function removeLeaderboards($leaderboard){
+        if($leaderboard === 'all'){
+            foreach($this->getServer()->getLevels() as $level){
+                foreach($level->getEntities() as $entity){
+                    if($this->isALEntity($entity) !== null){
+                        $entity->flagForDespawn();
+                    }
+                }
+            }
+        } else {
+            foreach($this->getServer()->getLevels() as $level){
+                foreach($level->getEntities() as $entity){
+                    if($this->isALEntity($entity) !== null){
+                        if($this->typeOfALEntity($entity) === $leaderboard){
+                            $entity->flagForDespawn();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function isALEntity($entity){
@@ -386,6 +481,26 @@ class Main extends PluginBase {
         arsort($bb);
         $bb = array_slice($bb, 0, $this->cfg->get('leaderboard-length'));
 
+        $jumps = $this->jumps->getAll();
+        arsort($jumps);
+        $jumps = array_slice($jumps, 0, $this->cfg->get('leaderboard-length'));
+
+        $messengers = $this->messengers->getAll();
+        arsort($messengers);
+        $messengers = array_slice($messengers, 0, $this->cfg->get('leaderboard-length'));
+
+        $crafts = $this->crafts->getAll();
+        arsort($crafts);
+        $crafts = array_slice($crafts, 0, $this->cfg->get('leaderboard-length'));
+
+        $ic = $this->ic->getAll();
+        arsort($ic);
+        $ic = array_slice($ic, 0, $this->cfg->get('leaderboard-length'));
+
+        $xp = $this->xp->getAll();
+        arsort($xp);
+        $xp = array_slice($xp, 0, $this->cfg->get('leaderboard-length'));
+
         $ot = $this->ot->getAll();
         arsort($ot);
         $ot = array_slice($ot, 0, $this->cfg->get('leaderboard-length'));
@@ -405,6 +520,11 @@ class Main extends PluginBase {
             'Top Highest Killstreak' => $hks,
             'Top Blocks Placed' => $bp,
             'Top Blocks Broken' => $bb,
+            'Top Jumps' => $jumps,
+            'Top Messengers' => $messengers,
+            'Top Crafter' => $crafts,
+            'Top Item Consumer' => $ic,
+            'Top Xp' => $xp,
             'Top Online Time' => $ot
         ];
 
@@ -469,8 +589,7 @@ class Main extends PluginBase {
                 $player->sendMessage($this->formatMessage($this->cfg->get('leaderboard-move-select-msg')));
             }
             if($data === 'remove'){
-                $this->lbremove[$player->getName()] = 'pending';
-                $player->sendMessage($this->formatMessage($this->cfg->get('leaderboard-remove-select-msg')));
+                $this->sendRemoveForm($player);
             }
         });
 
@@ -491,10 +610,19 @@ class Main extends PluginBase {
             foreach(self::LEADERBOARDS as $leaderboard){
                 if($data === $leaderboard){
                     $this->spawnLeaderboard($player, $leaderboard);
+                    $msg = $this->formatMessage($this->cfg->get('leaderboard-created-msg'));
+                    $player->sendMessage(str_replace('{leaderboard_type}', $leaderboard, $msg));
                 } else {
                     if($data === 'Top Money'){
                         $this->spawnLeaderboard($player, $data);
+                        $msg = $this->formatMessage($this->cfg->get('leaderboard-created-msg'));
+                        $player->sendMessage(str_replace('{leaderboard_type}', $data, $msg));
                         break;
+                    } else {
+                        if($data === 'back'){
+                            $this->sendLeaderboardForm($player);
+                            break;
+                        }
                     }
                 }
             }
@@ -506,6 +634,80 @@ class Main extends PluginBase {
         if($this->cfg->get('topmoney-leaderboard-support') == 'true'){
             $form->addButton('§l§bTop Money', '-1', '', 'Top Money');
         }
+        $form->addButton('§l§cBack', '-1', '', 'back');
+        $form->sendToPlayer($player);
+        return $form;
+    }
+
+    public function sendRemoveForm($player){
+        $form = new SimpleForm(function (Player $player, $data = null){
+            if($data === null){
+                return null;
+            }
+
+            if($data === 'one'){
+                $this->lbremove[$player->getName()] = 'pending';
+                $player->sendMessage($this->formatMessage($this->cfg->get('leaderboard-remove-select-msg')));
+            }
+
+            if($data === 'multi'){
+                $this->sendMultiRemoveForm($player);
+            }
+
+            if($data === 'back'){
+                $this->sendLeaderboardForm($player);
+            }
+        });
+        $form->setTitle(self::PREFIX);
+        $form->addButton('§l§bRemove One Leaderboard', '-1', '', 'one');
+        $form->addButton('§l§bRemove Multiple Leaderboards', '-1', '', 'multi');
+        $form->addButton('§l§cBack', '-1', '', 'back');
+        $form->sendToPlayer($player);
+        return $form;
+    }
+
+    public function sendMultiRemoveForm($player){
+        $form = new SimpleForm(function (Player $player, $data = null){
+            if($data === null){
+                return null;
+            }
+
+            foreach(self::LEADERBOARDS as $leaderboard){
+                if($data === $leaderboard){
+                    $this->removeLeaderboards($leaderboard);
+                    $msg = $this->formatMessage($this->cfg->get('leaderboard-type-removed-msg'));
+                    $player->sendMessage(str_replace('{leaderboard_type}', $leaderboard, $msg));
+                } else {
+                    if($data === 'Top Money'){
+                        $this->removeLeaderboards($data);
+                        $msg = $this->formatMessage($this->cfg->get('leaderboard-type-removed-msg'));
+                        $player->sendMessage(str_replace('{leaderboard_type}', $data, $msg));
+                        break;
+                    } else {
+                        if($data === 'all'){
+                            $this->removeLeaderboards($data);
+                            $player->sendMessage($this->formatMessage($this->cfg->get('leaderboard-all-removed-msg')));
+                            break;
+                        } else {
+                            if($data === 'back'){
+                                $this->sendRemoveForm($player);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+        });
+        $form->setTitle(self::PREFIX);
+        foreach(self::LEADERBOARDS as $leaderboard){
+            $form->addButton('§l§bRemove ' . $leaderboard, '-1', '', $leaderboard);
+        }
+        if($this->cfg->get('topmoney-leaderboard-support') == 'true'){
+            $form->addButton('§l§bRemove Top Money', '-1', '', 'Top Money');
+        }
+        $form->addButton('§l§cRemove All', '-1', '', 'all');
+        $form->addButton('§l§cBack', '-1', '', 'back');
         $form->sendToPlayer($player);
         return $form;
     }

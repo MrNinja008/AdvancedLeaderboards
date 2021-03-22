@@ -10,6 +10,9 @@ topmoney-leaderboard-support: true
 # Interval in which money data is updated in SECONDS [keeping it too low may cause performance issues]
 topmoney-update-time: 10
 
+# Interval in which xp data is update in SECONDS [keeping it too low may cause performance issues]
+topxp-update-time: 10
+
 # Interval in which the leaderboards are update in SECONDS [keeping it too low may cause performance issues]
 leaderboard-update-time: 10
 
@@ -59,16 +62,28 @@ invalid-player-msg: "{prefix} &cInvalid Player"
 leaderboard-created-msg: "{prefix} &aYou have successfully created a &6{leaderboard_type} &aleaderboard"
 
 # Message sent when a player now needs to select a leaderboard to be removed
-leaderboard-remove-select-msg: "{prefix} &aPlease punch the leaderboard you would like removed"
+leaderboard-remove-select-msg: "{prefix} &aPlease punch the leaderboard you would like removed. If you would like to cancel this action, type &ccancel"
+
+# Message sent when a player cancels a leaderboard remove action
+leaderboard-remove-cancelled-msg: "{prefix} &aYou have successfully cancelled the leaderboard remove action"
 
 # Message sent when a player removes a leaderboard [Use {leaderboard_type} for the type of leaderboard removed]
 leaderboard-removed-msg: "{prefix} &aYou have successfully removed a &6{leaderboard_type} &aleaderboard"
 
+# Message sent when a player removes all leaderboard of a specific type [Use {leaderboard_type} for the type of leaderboard removed]
+leaderboard-type-removed-msg: "{prefix} &aYou have successfully removed all &6{leaderboard_type} &aleaderboards"
+
+# Message sent when a player removes all leaderboards
+leaderboard-all-removed-msg: "{prefix} &aYou have successfully removed all leaderboards"
+
 # Message sent when a player now needs to select a leaderboard to be moved
-leaderboard-move-select-msg: "{prefix} &aPlease punch the leaerboard you would like moved"
+leaderboard-move-select-msg: "{prefix} &aPlease punch the leaerboard you would like moved. If you would like to cancel this action, type &ccancel"
+
+# Message sent when a player cancels a leaderboard move action
+leaderboard-move-cancelled-msg: "{prefix} &aYou have successfully cancelled the leaderboard move action"
 
 # Message sent when a player selects a leaderboard to be moved
-leaderboard-move-confirm-msg: "{prefix} &aPlease move to location where you would like the leaderboard to be moved. Then type &fconfirm &ato confirm the move"
+leaderboard-move-confirm-msg: "{prefix} &aPlease move to location where you would like the leaderboard to be moved. Type &fconfirm &ato confirm the move or Type &ccancel &ato cancel the move"
 
 # Message sent when a player moves a leaderboard [Use {leaderboard_type} for the type of leaderboard moved]
 leaderboard-moved-msg: "{prefix} &aYou have successully moved a &6{leaderboard_type} &aleadeboard"
@@ -77,15 +92,20 @@ leaderboard-moved-msg: "{prefix} &aYou have successully moved a &6{leaderboard_t
 
 # Varibles 
 # Everything is of the player whoes stats are shown
-# {name}
-# {joins}
-# {kills}
-# {deaths}
-# {kdr}
-# {killsteak}
-# {highestkillstreak}
-# {blocksplaced}
-# {blocksbroken}
+# {name} -> IGN
+# {joins} -> Number of joins
+# {kills} -> Number of kills
+# {deaths} -> Number of deaths
+# {kdr} -> Kill Death Ratio
+# {killsteak} -> Current killstreak
+# {highestkillstreak} -> Highest killstreak
+# {blocksplaced} -> Number of blocks placed
+# {blocksbroken} -> Number of blocks broken
+# {jumps} -> Number of jumps
+# {msgs} -> Number of messages sent
+# {xp} -> Xp Level
+# {crafts} -> Number of items crafted
+# {itemsconsumed} -> Number of items consumed
 
 # Online time variables
 # {hours}
@@ -95,4 +115,4 @@ leaderboard-moved-msg: "{prefix} &aYou have successully moved a &6{leaderboard_t
 # {money} (only matters if topmoney-leaderboard-support is set to true and economyapi is installed)
 
 # Message sent when a player runs the stats command
-stats-msg: "&3=== &bSTATS &3==={line}&6Name: &e{name}{line}&6Joins: &e{joins}{line}&6Kills: &e{kills}{line}&6Deaths: &e{deaths}{line}&6KDR: &e{kdr}{line}&6Killstreak: &e{killstreak}{line}&6Highest Killstreak: &e{highestkillstreak}{line}&6Blocks Placed: &e{blocksplaced}{line}&6Blocks Broken: &e{blocksbroken}{line}&6OnlineTime: &e{hours}H {minutes}M {seconds}S"
+stats-msg: "&3=== &bSTATS &3==={line}&6Name: &e{name}{line}&6Joins: &e{joins}{line}&6Kills: &e{kills}{line}&6Deaths: &e{deaths}{line}&6KDR: &e{kdr}{line}&6Killstreak: &e{killstreak}{line}&6Highest Killstreak: &e{highestkillstreak}{line}&6Blocks Placed: &e{blocksplaced}{line}&6Blocks Broken: &e{blocksbroken}{line}&6Jumps: &e{jumps}{line}&6Messages: &e{msgs}{line}&6Xp: &e{xp}{line}&6Items Crafted: &e{crafts}{line}&6Items Consumed: &e{itemsconsumed}{line}&6OnlineTime: &e{hours}H {minutes}M {seconds}S"
