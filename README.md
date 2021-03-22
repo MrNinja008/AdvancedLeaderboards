@@ -5,7 +5,7 @@ A Leaderboard & Statistics Plugin for Pocketmine-MP (3.0.0 and above)
 
 ## Features
 
-**TYPES OF LEADERBOARDS**
+### TYPES OF LEADERBOARDS
  - Top Joins
  - Top Kills
  - Top Deaths
@@ -22,11 +22,14 @@ A Leaderboard & Statistics Plugin for Pocketmine-MP (3.0.0 and above)
  - Top Online Time
  - Top Money (Requires EconomyAPI)
 
+### Other Info
+- Get individual player stats
 - User friendly 
-- 99% messages are configurable
+- Configurable Messages
 - Configurable update times
 - Configurable leaderboard formats
 - Permission nodes
+- Doesnt get cleared by plugins like AutoClearLagg
 
 ## Commands & Permissions
 Commands | Aliases | Description | Permissions
