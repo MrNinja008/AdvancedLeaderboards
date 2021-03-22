@@ -5,7 +5,7 @@ A Leaderboard & Statistics Plugin for Pocketmine-MP (3.0.0 and above)
 
 ## Features
 
-### TYPES OF LEADERBOARDS
+### Types of Leaderboards
  - Top Joins
  - Top Kills
  - Top Deaths
