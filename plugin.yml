@@ -7,5 +7,5 @@ mcpe-protocol: [428]
 softdepend: [EconomyAPI]
 
 permissions:
-  al.command.leaderboard:
+  advancedleaderboards.command.lb:
     description: Allows a player to access all leaderboard commands!
