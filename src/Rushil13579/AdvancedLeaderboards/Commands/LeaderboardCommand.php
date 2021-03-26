@@ -22,7 +22,7 @@ class LeaderboardCommand extends Command {
         $this->main = $main;
 
         parent::__construct('leaderboard', 'Master command for Advanced Leaderboards', '/lb', ['lb']);
-        $this->setPermission('al.command.leaderboard');
+        $this->setPermission('advancedleaderboards.command.lb');
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args){
@@ -31,7 +31,7 @@ class LeaderboardCommand extends Command {
             return false;
         }
 
-        if(!$sender->hasPermission('al.command.leaderboard')){
+        if(!$sender->hasPermission('advancedleaderboards.command.lb')){
             $sender->sendMessage($this->main->formatMessage($this->main->cfg->get('no-perm-msg')));
             return false;
         }
