@@ -34,7 +34,7 @@ A Leaderboard & Statistics Plugin for Pocketmine-MP (3.0.0 and above)
 ## Commands & Permissions
 Commands | Aliases | Description | Permissions
 ---------|---------|-------------|------------
-/leaderboard | [/lb] | Master command for managing leaderboards | al.command.leaderboard
+/leaderboard | [/lb] | Master command for managing leaderboards | advancedleaderboards.command.lb
 /stats (ign optional) | none | Shows a player's stats | none
 
 ## Future Plans
